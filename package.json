@@ -1,0 +1,19 @@
+{
+
+  "scripts": {
+
+    "go": "sh resources/conf/caps/linux.sh"
+
+  },
+
+  "dependencies": {
+
+    "@browserstack/testcafe": "^1.8.6",
+
+    "@browserstack/testcafe-browser-provider-browserstack": "^1.13.3",
+
+    "csv-parse": "4.15.3"
+
+  }
+}
+
