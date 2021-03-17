@@ -53,7 +53,7 @@ run_single_test(){
     # the browserstack fork of testcafe's browserstack integration
     browser="@browserStack/browserstack:chrome@84.0:Windows 10"
 
-    test_file="src/test/suites/login/test3.js"
+    test_file="src/test/suites/product/test3.js"
 
     $testcafe $browser $test_file --test-scheduling --reporter spec
 
@@ -111,10 +111,12 @@ run_parallel_fixture_1b(){
 
 start_local()
 {
+    echo "local start"
     resources/local/BrowserStackLocal --key $BROWSERSTACK_ACCESS_KEY --local-identifier TestCafe --daemon start;
 }
 
 end_local(){
+    echo "local end"
     resources/local/BrowserStackLocal --key $BROWSERSTACK_ACCESS_KEY --local-identifier TestCafe --daemon stop;
 }
 
@@ -130,7 +132,7 @@ run_local_test(){
     export TEST_BASE_URL="http://localhost:3000/"
 
     # the `start_local` function defined above, starts the local binary. 
-    start_local
+    #start_local
 
 
     browser="@browserStack/browserstack:chrome@84.0:Windows 10"
@@ -141,16 +143,16 @@ run_local_test(){
     # the `end_local` function defined above, stops the local binary. 
     # stopping the binary is extremely important, an unclosed binary can interfere with future
     # test executions
-    end_local
+   # end_local
 
 }
 
-run_ip_geolocation(){
+run_geolocation(){
+    common_env
+    #export BROWSERSTACK_CAPABILITIES_CONFIG_PATH="/Users/madhav/Desktop/dev/browserstack-testcafe/resources/conf/caps/browserstack-config.json"
+    env
 
-    export BROWSERSTACK_GEO_LOCATION="IN"
-
-    browser="@browserStack/browserstack:firefox@74.0:OS X High Sierra"
-
+    browser="@browserStack/browserstack:Samsung Galaxy S20 Ultra"
     # the login folder contains all the tests associated with the login fixture
     test_file="src/test/suites/offers/test9.js"
 
@@ -178,8 +180,8 @@ remote_logic(){
     elif [ $suite == "parallel-3" ]; then
         run_parallel_fixture_1b
 
-    elif [ $suite == "ip_geolocation" ]; then
-        run_ip_geolocation
+    elif [ $suite == "geolocation" ]; then
+        run_geolocation
 
     else
         echo "invalid suite option; suite should be from (\"single\", \"local\", \"parallel-1\", \"parallel-2\", \"parallel-3\", \"e2e_ip_geolocation\""
@@ -189,7 +191,7 @@ remote_logic(){
 
 run_single_test_on_prem(){
     browser="chrome"
-    test_file="src/test/suites/login/test4.js"
+    test_file="src/test/suites/product/test2.js"
     $testcafe "$browser"  $test_file  --test-scheduling   --reporter spec
 }
 

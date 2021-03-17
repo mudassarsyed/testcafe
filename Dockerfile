@@ -1,7 +1,7 @@
 FROM alpine:edge
 
-RUN addgroup -g 1000 node \
-    && adduser -u 1000 -G node -s /bin/sh -D node
+#RUN addgroup -g 1000 node \
+#    && adduser -u 1000 -G node -s /bin/sh -D node
 
 RUN mkdir -p /app
 
@@ -45,13 +45,30 @@ RUN rm -rf /var/cache/apk/*
 
 WORKDIR /app
 
+
+
+
+
 # Switching to non-root user
-USER node
+#USER node
 
 # Required for TestCafe
 EXPOSE 1337 1338
 
-# Install Node.js dependecies
-ENTRYPOINT [ "npm install" ]
 
-CMD xvfb-run --server-num=99 --server-args='-ac -screen 0 1024x768x16' sh linux.sh remote parallel-3   
+COPY package.json package.json
+COPY package-lock.json package-lock.json
+
+RUN npm install
+
+
+COPY . .
+
+# Install Node.js dependecies
+#ENTRYPOINT [ "npm -v" ]
+
+#CMD xvfb-run --server-num=99 --server-args='-ac -screen 0 1024x768x16' sh linux.sh remote parallel-3   
+
+CMD [ "pwd" ]
+
+#CMD [ "sh", "linux.sh", "remote", "single" ]

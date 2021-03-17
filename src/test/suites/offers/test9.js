@@ -1,8 +1,17 @@
-import { Selector } from 'testcafe';
+import { Selector, ClientFunction } from 'testcafe';
 
 
 fixture("login")
-    .page("http://bstackdemo.com/");
+    .page(process.env.TEST_BASE_URL);
+
+
+const submitAction = ClientFunction(() => {
+    navigator.geolocation.getCurrentPosition = function(cb){cb({ coords: {accuracy: 20,altitude: null,altitudeAccuracy: null,heading: null,latitude: 19.043192,longitude: 72.86305240000002,speed: null}}); };
+});
+
+const submitAction_1 = ClientFunction(() => {
+    "window.navigator.geolocation.getCurrentPosition = function(cb){cb({ coords: {accuracy: 20,altitude: null,altitudeAccuracy: null,heading: null,latitude: 19.043192,longitude: 72.86305240000002,speed: null}}); }"
+});
 
 
 test("Click on Sign In button and Login as existing_orders_user and click on orders Nav item", async (t) => {
@@ -17,6 +26,8 @@ test("Click on Sign In button and Login as existing_orders_user and click on ord
     const ordersList        = Selector('.offer');
     const offersCount       = ordersList.count;
         
+    //await submitAction();
+    //await submitAction_1();
     await t
         .click(signInButton)
         .typeText(userNameInput,userName)
