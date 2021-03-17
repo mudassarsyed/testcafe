@@ -53,7 +53,7 @@ run_single_test(){
     # the browserstack fork of testcafe's browserstack integration
     browser="@browserStack/browserstack:chrome@84.0:Windows 10"
 
-    test_file="src/test/suites/product/test3.js"
+    test_file="src/test/suites/login/test3.js"
 
     $testcafe $browser $test_file --test-scheduling --reporter spec
 
@@ -62,16 +62,16 @@ run_single_test(){
 # run one test on multiple browsers
 run_parallel_1t_Nb(){
 
-    common_env
-    browser_list="@browserStack/browserstack:firefox@74.0:OS X High Sierra,@browserStack/browserstack:chrome@80.0:OS X High Sierra,@browserStack/browserstack:ie@11:Windows 10,@browserStack/browserstack:chrome@80.0:Windows 10,@browserStack/browserstack:firefox@75.0:Windows 8.1"
+    
+    #browser_list="@browserStack/browserstack:firefox@74.0:OS X High Sierra,@browserStack/browserstack:chrome@80.0:OS X High Sierra,@browserStack/browserstack:ie@11:Windows 10,@browserStack/browserstack:chrome@80.0:Windows 10,@browserStack/browserstack:firefox@75.0:Windows 8.1"
     test_file="src/test/suites/login/test3.js"
-    num_parallels=4
 
 
     #$testcafe "$browser_list"  $test_file --test-scheduling --reporter spec
     $testcafe "@browserStack/browserstack:firefox@74.0:OS X High Sierra"  $test_file --test-scheduling --reporter spec &
     $testcafe "@browserStack/browserstack:chrome@80.0:OS X High Sierra"  $test_file --test-scheduling --reporter spec &
-    $testcafe "@browserStack/browserstack:ie@11:Windows 10"  $test_file --test-scheduling --reporter spec &
+    $testcafe "@browserStack/browserstack:firefox@75.0:Windows 8.1"  $test_file --test-scheduling --reporter spec &
+    $testcafe "@browserStack/browserstack:Samsung Galaxy S20@10.0"  $test_file --test-scheduling --reporter spec &
     $testcafe "@browserStack/browserstack:firefox@75.0:Windows 8.1"  $test_file --test-scheduling --reporter spec
 
 
@@ -80,23 +80,32 @@ run_parallel_1t_Nb(){
 # run multiple tests concurrently on a single browser
 run_parallel_Nt_1b(){
 
-    common_env
+    
     browser="@browserStack/browserstack:firefox@74.0:OS X High Sierra"
 
-    test_file1="src/test/suites/login/test3.js"
-    test_file2="src/test/suites/login/test4.js"
-    test_file3="src/test/suites/product/test1.js"
-
-    max_parallels=3
+    test_file3="src/test/suites/login/test3.js"
+    test_file4="src/test/suites/login/test4.js"
+    test_file1="src/test/suites/product/test1.js"
+    test_file2="src/test/suites/product/test2.js"
+    test_file5="src/test/suites/user/test5.js"
+    test_file6="src/test/suites/user/test6.js"
+    test_file7="src/test/suites/user/test7.js"
     
-    $testcafe "$browser"  $test_file1 $test_file2 $test_file3 -c $max_parallels --test-scheduling
+    $testcafe "$browser"  $test_file1 --test-scheduling &
+    $testcafe "$browser"  $test_file2 --test-scheduling &
+    $testcafe "$browser"  $test_file3 --test-scheduling &
+    $testcafe "$browser"  $test_file4 --test-scheduling &
+    $testcafe "$browser"  $test_file5 --test-scheduling &
+    $testcafe "$browser"  $test_file6 --test-scheduling &
+    $testcafe "$browser"  $test_file7 --test-scheduling &
+    
 
 }
 
 # run all tests in a fixture concurrently on a single browser
 run_parallel_fixture_1b(){
 
-    common_env
+    
     browser="@browserStack/browserstack:firefox@74.0:OS X High Sierra"
 
     # the login folder contains all the tests associated with the login fixture
@@ -111,46 +120,25 @@ run_parallel_fixture_1b(){
 
 start_local()
 {
+    export BROWSERSTACK_LOCAL_IDENTIFIER="TestCafe"
+    # overwrite the base url defined in function `common_env` since we are trying out local-testing
+    # local testing allows you to test on internal environments like a locally hosted webapp
+    export TEST_BASE_URL="http://localhost:3000/"
     echo "local start"
     resources/local/BrowserStackLocal --key $BROWSERSTACK_ACCESS_KEY --local-identifier TestCafe --daemon start;
 }
 
 end_local(){
+    wait
     echo "local end"
     resources/local/BrowserStackLocal --key $BROWSERSTACK_ACCESS_KEY --local-identifier TestCafe --daemon stop;
 }
 
-# run a test with local testing enabled
-run_local_test(){
-    common_env
-
-    export BROWSERSTACK_LOCAL_IDENTIFIER="TestCafe"
-
-
-    # overwrite the base url defined in function `common_env` since we are trying out local-testing
-    # local testing allows you to test on internal environments like a locally hosted webapp
-    export TEST_BASE_URL="http://localhost:3000/"
-
-    # the `start_local` function defined above, starts the local binary. 
-    #start_local
-
-
-    browser="@browserStack/browserstack:chrome@84.0:Windows 10"
-    test_file="src/test/suites/login/test3.js"
-
-    $testcafe $browser  $test_file --test-scheduling
-    
-    # the `end_local` function defined above, stops the local binary. 
-    # stopping the binary is extremely important, an unclosed binary can interfere with future
-    # test executions
-   # end_local
-
-}
 
 run_geolocation(){
-    common_env
-    #export BROWSERSTACK_CAPABILITIES_CONFIG_PATH="/Users/madhav/Desktop/dev/browserstack-testcafe/resources/conf/caps/browserstack-config.json"
-    env
+    
+    export BROWSERSTACK_CAPABILITIES_CONFIG_PATH="/Users/madhav/Desktop/dev/browserstack-testcafe/resources/conf/caps/browserstack-config.json"
+
 
     browser="@browserStack/browserstack:Samsung Galaxy S20 Ultra"
     # the login folder contains all the tests associated with the login fixture
@@ -161,31 +149,37 @@ run_geolocation(){
 
 remote_logic(){
 
+    
     # set the common env variables from the `common_env` function defined above
     # these common environment variables are necesaary for the browerstack plugin
     common_env
 
+    #start local 
+    start_local
+
     if   [ $suite == "single" ]; then
         run_single_test 
 
-    elif [ $suite == "local" ]; then
-        run_local_test
+    elif [ $suite == "parallel" ]; then
+        run_parallel_Nt_1b
 
-    elif [ $suite == "parallel-1" ]; then
+    elif [ $suite == "parallel-browsers" ]; then
         run_parallel_1t_Nb
 
-    elif [ $suite == "parallel-2" ]; then
+    elif [ $suite == "local" ]; then
+        run_single_test 
+    elif [ $suite == "local-parallel" ]; then
         run_parallel_Nt_1b
-    
-    elif [ $suite == "parallel-3" ]; then
-        run_parallel_fixture_1b
-
+    elif [ $suite == "local-parallel-browsers" ]; then
+        run_parallel_1t_Nb
     elif [ $suite == "geolocation" ]; then
         run_geolocation
 
     else
         echo "invalid suite option; suite should be from (\"single\", \"local\", \"parallel-1\", \"parallel-2\", \"parallel-3\", \"e2e_ip_geolocation\""
     fi
+
+    end_local
 }
 
 
@@ -200,9 +194,6 @@ run_parallel_1t_Nb_on_prem(){
     test_file="src/test/suites/login/test4.js"
     $testcafe "$browser"  $test_file  --test-scheduling   --reporter spec
 }
-
-
-
 
 
 

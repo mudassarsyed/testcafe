@@ -69,6 +69,4 @@ COPY . .
 
 #CMD xvfb-run --server-num=99 --server-args='-ac -screen 0 1024x768x16' sh linux.sh remote parallel-3   
 
-CMD [ "pwd" ]
-
-#CMD [ "sh", "linux.sh", "remote", "single" ]
+CMD ["sh", "linux.sh", "on-prem", "single" ]

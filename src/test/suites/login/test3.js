@@ -1,5 +1,4 @@
 import { Selector } from 'testcafe';
-import { ClientFunction } from 'testcafe';
 
 
 fixture("login")
@@ -9,11 +8,11 @@ test("Click on favourites Nav Item", async (t) => {
 
 
     const favouritesButton = Selector('#favourites');
-    const URL = process.env.TEST_BASE_URL+'signin?favourites=true';
-    const getURL = ClientFunction(() => window.location.href);
+    const signInButtonExists = Selector('#login-btn').exists;
 
     await t
         .click(favouritesButton)
-        .expect(getURL())
-        .eql(URL);
+        .wait(3000)
+        .expect(signInButtonExists)
+        .ok();
     })
