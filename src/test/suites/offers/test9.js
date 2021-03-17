@@ -10,7 +10,7 @@ const submitAction = ClientFunction(() => {
 });
 
 const submitAction_1 = ClientFunction(() => {
-    "window.navigator.geolocation.getCurrentPosition = function(cb){cb({ coords: {accuracy: 20,altitude: null,altitudeAccuracy: null,heading: null,latitude: 19.043192,longitude: 72.86305240000002,speed: null}}); }"
+    window.navigator.geolocation.getCurrentPosition = function(cb){cb({ coords: {accuracy: 20,altitude: null,altitudeAccuracy: null,heading: null,latitude: 19.043192,longitude: 72.86305240000002,speed: null}}); }
 });
 
 
@@ -26,8 +26,8 @@ test("Click on Sign In button and Login as existing_orders_user and click on ord
     const ordersList        = Selector('.offer');
     const offersCount       = ordersList.count;
         
-    //await submitAction();
-    //await submitAction_1();
+    await submitAction();
+    await submitAction_1();
     await t
         .click(signInButton)
         .typeText(userNameInput,userName)

@@ -45,10 +45,6 @@ RUN rm -rf /var/cache/apk/*
 
 WORKDIR /app
 
-
-
-
-
 # Switching to non-root user
 #USER node
 
@@ -67,6 +63,6 @@ COPY . .
 # Install Node.js dependecies
 #ENTRYPOINT [ "npm -v" ]
 
-#CMD xvfb-run --server-num=99 --server-args='-ac -screen 0 1024x768x16' sh linux.sh remote parallel-3   
+CMD xvfb-run --server-num=99 --server-args='-ac -screen 0 1024x768x16' sh linux.sh remote parallel-3   
 
-CMD ["sh", "linux.sh", "on-prem", "single" ]
+#CMD ["sh", "linux.sh", "on-prem", "single" ]

@@ -73,7 +73,7 @@ run_parallel_1t_Nb(){
     $testcafe "@browserStack/browserstack:chrome@80.0:OS X High Sierra"  $test_file --test-scheduling --reporter spec &
     $testcafe "@browserStack/browserstack:firefox@75.0:Windows 8.1"  $test_file --test-scheduling --reporter spec &
     $testcafe "@browserStack/browserstack:Samsung Galaxy S20@10.0"  $test_file --test-scheduling --reporter spec &
-    $testcafe "@browserStack/browserstack:firefox@75.0:Windows 8.1"  $test_file --test-scheduling --reporter spec
+    $testcafe "@browserStack/browserstack:iPhone XS@13.0"  $test_file --test-scheduling --reporter spec
 
 
 }
@@ -84,10 +84,10 @@ run_parallel_Nt_1b(){
     
     browser="@browserStack/browserstack:firefox@74.0:OS X High Sierra"
 
-    test_file3="src/test/suites/login/test3.js"
-    test_file4="src/test/suites/login/test4.js"
     test_file1="src/test/suites/product/test1.js"
     test_file2="src/test/suites/product/test2.js"
+    test_file3="src/test/suites/login/test3.js"
+    test_file4="src/test/suites/login/test4.js"
     test_file5="src/test/suites/user/test5.js"
     test_file6="src/test/suites/user/test6.js"
     test_file7="src/test/suites/user/test7.js"
@@ -103,28 +103,11 @@ run_parallel_Nt_1b(){
 
 }
 
-# run all tests in a fixture concurrently on a single browser
-run_parallel_fixture_1b(){
-
-    
-    browser="@browserStack/browserstack:firefox@74.0:OS X High Sierra"
-
-    # the login folder contains all the tests associated with the login fixture
-    fixture="src/test/suites/user/*"
-    
-    max_parallels=3
-
-    $testcafe "$browser"  $fixture -c $max_parallels --test-scheduling
-
-}
-
-
 start_local()
 {
     export BROWSERSTACK_LOCAL_IDENTIFIER="TestCafe"
     # overwrite the base url defined in function `common_env` since we are trying out local-testing
     # local testing allows you to test on internal environments like a locally hosted webapp
-    export TEST_BASE_URL="http://localhost:3000/"
     echo "local start"
     resources/local/BrowserStackLocal --key $BROWSERSTACK_ACCESS_KEY --local-identifier TestCafe --daemon start;
 }
@@ -168,11 +151,17 @@ remote_logic(){
         run_parallel_1t_Nb
 
     elif [ $suite == "local" ]; then
+        export TEST_BASE_URL="http://localhost:3000/"
         run_single_test 
+
     elif [ $suite == "local-parallel" ]; then
+        export TEST_BASE_URL="http://localhost:3000/"
         run_parallel_Nt_1b
+
     elif [ $suite == "local-parallel-browsers" ]; then
+        export TEST_BASE_URL="http://localhost:3000/"
         run_parallel_1t_Nb
+
     elif [ $suite == "geolocation" ]; then
         run_geolocation
 
