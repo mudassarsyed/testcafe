@@ -21,11 +21,12 @@ common_env(){
     export TESTCAFE_BROWSERSTACK_API_POLLING_INTERVAL="40000"
     
     # browserstack credentials
-    export BROWSERSTACK_USERNAME=""
-    export BROWSERSTACK_ACCESS_KEY=""
+    #export BROWSERSTACK_USERNAME=""
+    #export BROWSERSTACK_ACCESS_KEY=""
 
     # set the build name, a build is a logical grouping of tests on the automate dashboard
-    export BROWSERSTACK_BUILD_ID="test-cafe"
+    time_stamp=$(date +"%Y-%m-%d %H:%M:%S")
+    export BROWSERSTACK_BUILD_ID="test-cafe-{$(date +"%Y-%m-%d %H:%M:%S")}"
 
     # enable/ disable the debugging logs generated
     export BROWSERSTACK_DEBUG="true"
