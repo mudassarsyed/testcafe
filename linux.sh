@@ -65,7 +65,7 @@ run_parallel_1t_Nb(){
 
     
     #browser_list="@browserStack/browserstack:firefox@74.0:OS X High Sierra,@browserStack/browserstack:chrome@80.0:OS X High Sierra,@browserStack/browserstack:ie@11:Windows 10,@browserStack/browserstack:chrome@80.0:Windows 10,@browserStack/browserstack:firefox@75.0:Windows 8.1"
-    test_file="src/test/suites/login/test3.js"
+    test_file="src/test/suites/offers/test9.js"
 
 
     #$testcafe "$browser_list"  $test_file --test-scheduling --reporter spec
@@ -109,12 +109,15 @@ start_local()
     # overwrite the base url defined in function `common_env` since we are trying out local-testing
     # local testing allows you to test on internal environments like a locally hosted webapp
     echo "local start"
+    # start the local binary
     resources/local/BrowserStackLocal --key $BROWSERSTACK_ACCESS_KEY --local-identifier TestCafe --daemon start;
 }
 
 end_local(){
+    # wait until all the tests complete
     wait
     echo "local end"
+    # close the local binary
     resources/local/BrowserStackLocal --key $BROWSERSTACK_ACCESS_KEY --local-identifier TestCafe --daemon stop;
 }
 
@@ -185,6 +188,27 @@ run_parallel_1t_Nb_on_prem(){
     $testcafe "$browser"  $test_file  --test-scheduling   --reporter spec
 }
 
+run_suite_on_prem(){
+    browser="chrome"
+    test_file1="src/test/suites/product/test1.js"
+    test_file2="src/test/suites/product/test2.js"
+    test_file3="src/test/suites/login/test3.js"
+    test_file4="src/test/suites/login/test4.js"
+    test_file5="src/test/suites/user/test5.js"
+    test_file6="src/test/suites/user/test6.js"
+    test_file7="src/test/suites/user/test7.js"
+    test_file8="src/test/suites/e2e/test8.js"
+    test_file9="src/test/suites/offers/test9.js"
+    $testcafe "$browser"  $test_file1  --test-scheduling   --reporter spec &&
+    $testcafe "$browser"  $test_file2  --test-scheduling   --reporter spec &&
+    $testcafe "$browser"  $test_file3  --test-scheduling   --reporter spec &&
+    $testcafe "$browser"  $test_file4  --test-scheduling   --reporter spec &&
+    $testcafe "$browser"  $test_file5  --test-scheduling   --reporter spec &&
+    $testcafe "$browser"  $test_file6  --test-scheduling   --reporter spec &&
+    $testcafe "$browser"  $test_file7  --test-scheduling   --reporter spec &&
+    $testcafe "$browser"  $test_file8  --test-scheduling   --reporter spec &&
+    $testcafe "$browser"  $test_file9  --test-scheduling   --reporter spec 
+}
 
 
 on_prem_logic(){
@@ -195,6 +219,9 @@ on_prem_logic(){
 
     elif [ $suite == "parallel" ]; then
         run_parallel_1t_Nb_on_prem
+
+    elif [ $suite == "suite" ]; then
+        run_suite_on_prem
 
     else
         echo "invalid suite option; suite should be from (\"single\", \"local\", \"parallel-1\", \"parallel-2\", \"parallel-3\", \"e2e_ip_geolocation\""

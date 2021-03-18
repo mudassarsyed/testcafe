@@ -8,7 +8,7 @@
 
 - Clone this repository
 
-  `git clone https://github.com/browserstack/browserstack-examples-~framework1~-~framework2~`
+  `git clone https://github.com/browserstack/browserstack-examples-testcafe`
 
 - Install the following dependencies
   - ~lang~ >= ~version~
@@ -49,7 +49,7 @@ You can interact with a browser for eg Chrome using it's drivers for eg. ChromeD
 ## Prerequisites
 
 - Browser Specific driver (~mention how to download browser driver for eg npm install chromedriver~)
-- ~any additional lang specific setup for eg downloading dependencies like npm install or mvn install~
+- npm install
 
 ## Run Your Tests
 
@@ -64,7 +64,7 @@ In this section we will run a test on a sample browser on your machine.
   To run the test go to your terminal or command line and paste the following command:
 
   ```sh
-  ~single test on-prem command~
+  sh linux.sh on-prem single
   ```
 
 - Output
@@ -91,7 +91,7 @@ In this section we will run the entire test suite on a sample browser on your ma
   To run the test go to your terminal or command line and paste the following command:
 
   ```sh
-  ~suite test on-prem command~
+  sh linux.sh on-prem suite
   ```
 
 - Output
