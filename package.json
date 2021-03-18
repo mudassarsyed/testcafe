@@ -12,8 +12,9 @@
 
     "@browserstack/testcafe-browser-provider-browserstack": "^1.13.3",
 
-    "csv-parse": "4.15.3"
+    "testcafe-reporter-html": "^1.4.6"
 
   }
+
 }
 

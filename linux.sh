@@ -21,8 +21,8 @@ common_env(){
     export TESTCAFE_BROWSERSTACK_API_POLLING_INTERVAL="40000"
     
     # browserstack credentials
-    #export BROWSERSTACK_USERNAME=""
-    #export BROWSERSTACK_ACCESS_KEY=""
+    export BROWSERSTACK_USERNAME=""
+    export BROWSERSTACK_ACCESS_KEY=""
 
     # set the build name, a build is a logical grouping of tests on the automate dashboard
     time_stamp=$(date +"%Y-%m-%d %H:%M:%S")
@@ -78,29 +78,44 @@ run_parallel_1t_Nb(){
 
 }
 
-# run multiple tests concurrently on a single browser
-run_parallel_Nt_1b(){
 
-    
+#
+run_all_fixtures(){
+
+    # base path to folder where all the test files are 
+    test_base_path="src/test/suites"
     browser="@browserStack/browserstack:firefox@74.0:OS X High Sierra"
 
-    test_file1="src/test/suites/product/test1.js"
-    test_file2="src/test/suites/product/test2.js"
-    test_file3="src/test/suites/login/test3.js"
-    test_file4="src/test/suites/login/test4.js"
-    test_file5="src/test/suites/user/test5.js"
-    test_file6="src/test/suites/user/test6.js"
-    test_file7="src/test/suites/user/test7.js"
-    
-    $testcafe "$browser"  $test_file1 --test-scheduling &
-    $testcafe "$browser"  $test_file2 --test-scheduling &
-    $testcafe "$browser"  $test_file3 --test-scheduling &
-    $testcafe "$browser"  $test_file4 --test-scheduling &
-    $testcafe "$browser"  $test_file5 --test-scheduling &
-    $testcafe "$browser"  $test_file6 --test-scheduling &
-    $testcafe "$browser"  $test_file7 --test-scheduling &
-    
+    # set this variable to the max number of parallels you have on browserstack
+    # we would execute all the tests in batches of max_parallel tests. Thus
+    # at a given time a max of max_parallel tests would be running in parallel
+    # this helps prevent queuing and test dropping
+    max_parallels=9
 
+    # the i counter helps in creating the batches
+    i=0
+
+    # iterate through all the files in the test_base_path diretory
+    for test_path in $(find $test_base_path -type f -print)
+    do
+        # this is the case when i max_parallel-1. This signifies the last test ina batch from i=0 to 
+        # max_parallel-1 thus after this test we put a wait. A wait basically stops execution until all 
+        # processes have finished execution. In our case this means, it waits until a batch of max_parallel 
+        # has finished execution
+        if [ $((i%max_parallels)) == $((max_parallels-1)) ]; then
+            $testcafe "$browser"  "$test_path" --test-scheduling 
+            wait
+        
+        else
+        # notice the & at the end. This means that the next test would be run in parallel with this test
+        # this command is executed when i=0,1,...,max_parallel-2
+            $testcafe "$browser"  "$test_path" --test-scheduling &
+        fi
+        # increment i
+        i=$((i+1))
+    done
+    wait
+    echo ""
 }
 
 start_local()
@@ -121,20 +136,10 @@ end_local(){
     resources/local/BrowserStackLocal --key $BROWSERSTACK_ACCESS_KEY --local-identifier TestCafe --daemon stop;
 }
 
-
-run_geolocation(){
-    
-    export BROWSERSTACK_CAPABILITIES_CONFIG_PATH="/Users/madhav/Desktop/dev/browserstack-testcafe/resources/conf/caps/browserstack-config.json"
+#$testcafe "$browser"  $test_file  --test-scheduling   -r html:reports/report.html
 
 
-    browser="@browserStack/browserstack:Samsung Galaxy S20 Ultra"
-    # the login folder contains all the tests associated with the login fixture
-    test_file="src/test/suites/offers/test9.js"
-
-    $testcafe "$browser"  $test_file  --test-scheduling   --reporter spec
-}
-
-remote_logic(){
+bstack_logic(){
 
     
     # set the common env variables from the `common_env` function defined above
@@ -148,7 +153,7 @@ remote_logic(){
         run_single_test 
 
     elif [ $suite == "parallel" ]; then
-        run_parallel_Nt_1b
+        run_all_fixtures
 
     elif [ $suite == "parallel-browsers" ]; then
         run_parallel_1t_Nb
@@ -159,15 +164,11 @@ remote_logic(){
 
     elif [ $suite == "local-parallel" ]; then
         export TEST_BASE_URL="http://localhost:3000/"
-        run_parallel_Nt_1b
+        run_all_fixtures
 
     elif [ $suite == "local-parallel-browsers" ]; then
         export TEST_BASE_URL="http://localhost:3000/"
         run_parallel_1t_Nb
-
-    elif [ $suite == "geolocation" ]; then
-        run_geolocation
-
     else
         echo "invalid suite option; suite should be from (\"single\", \"local\", \"parallel-1\", \"parallel-2\", \"parallel-3\", \"e2e_ip_geolocation\""
     fi
@@ -177,16 +178,11 @@ remote_logic(){
 
 
 run_single_test_on_prem(){
-    browser="chrome"
+    browser="firefox"
     test_file="src/test/suites/product/test2.js"
     $testcafe "$browser"  $test_file  --test-scheduling   --reporter spec
 }
 
-run_parallel_1t_Nb_on_prem(){
-    browser="all"
-    test_file="src/test/suites/login/test4.js"
-    $testcafe "$browser"  $test_file  --test-scheduling   --reporter spec
-}
 
 run_suite_on_prem(){
     browser="chrome"
@@ -211,14 +207,13 @@ run_suite_on_prem(){
 }
 
 
+
+
 on_prem_logic(){
     common_env
 
     if   [ $suite == "single" ]; then
         run_single_test_on_prem
-
-    elif [ $suite == "parallel" ]; then
-        run_parallel_1t_Nb_on_prem
 
     elif [ $suite == "suite" ]; then
         run_suite_on_prem
@@ -229,17 +224,28 @@ on_prem_logic(){
 }
 
 
+
+docker_logic(){
+    docker run -e TEST_BASE_URL='http://bstackdemo.com/' -p 1337:1337 -p 1338:1338 -v /Users/madhav/Desktop/dev/browserstack-testcafe/src/test:/test -it testcafe/testcafe firefox  --hostname localhost remote test/suites/login/test3.js
+}
+
+
+
+#run_all_fixtures
 # launch remote or on-prem tests.
 # remote tests would run on browserstack, on-prem tests would launch on the local machine.
 
-if   [ $env_type == "remote" ]; then
-    remote_logic suite
+if   [ $env_type == "bstack" ]; then
+    bstack_logic suite
 
 elif [ $env_type == "on-prem" ]; then
     on_prem_logic suite
 
+elif [ $env_type == "docker" ]; then
+    docker_logic
+
 else
-    echo "invalid run environment; choose between \"remote\" or \"on-prem\""
+    echo "invalid run environment; choose between \"bstack\" or \"on-prem\" or \"docker\""
 
 fi
 

@@ -1,6 +1,6 @@
 
 import { Role, Selector } from 'testcafe';
-
+import { readFile } from 'fs';
 
 
 
@@ -69,6 +69,31 @@ const fav_user = Role(process.env.TEST_BASE_URL+"signin", async t => {
 
 
 
+var userRolesDict = {};
+readFile('resources/data/Users.json', (err, data) => {
+
+    if (err) throw err;
+
+    const userNameInput         = Selector('#username input');
+    const passwordInput         = Selector('#password input');
+    const loginButton           = Selector('#login-btn');
+
+    let passwords = JSON.parse(data);
+
+    Object.keys(passwords).forEach(function(username) {
+
+        userRolesDict[username] = Role(process.env.TEST_BASE_URL+"signin", async t => {
+            await t
+                .typeText(userNameInput,username)
+                .pressKey('enter')
+                .typeText(passwordInput,passwords[username])
+                .pressKey('enter')
+                .click(loginButton)
+        });
+    })
+});
+
+
 /*
 import { createReadStream } from 'fs';
 import pkg from 'csv-parse';
@@ -89,4 +114,4 @@ createReadStream('./resources/data/Users.csv')
     });
 */
 
-export { locked_user, image_not_loading_user, existing_orders_user, fav_user };
+export { locked_user, image_not_loading_user, existing_orders_user, fav_user, userRolesDict };
