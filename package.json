@@ -2,8 +2,6 @@
 
   "scripts": {
 
-    "go": "sh resources/conf/caps/linux.sh"
-
   },
 
   "dependencies": {

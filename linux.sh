@@ -1,13 +1,13 @@
 #!/bin/sh
 
 
-# read the env type and suite name from commandline arguments
-# the env_type can be "on-prem" or "remote"
-# set on-prem to run suite locally, and remote to run on suite browserstack
-# set suite name, we have defined different test combinations depending on suite name which cover 
+# read the env type and profile name from commandline arguments
+# the env_type can be "on-prem" or "bstack"
+# set on-prem to run profile locally, and bstack to run  profile browserstack
+# set profile name, we have defined different test combinations depending on profile name which cover 
 # a broad range of usecases
 env_type=$1
-suite=$2
+profile=$2
 
 # define testcafe location
 testcafe="./node_modules/.bin/testcafe"
@@ -21,8 +21,8 @@ common_env(){
     export TESTCAFE_BROWSERSTACK_API_POLLING_INTERVAL="40000"
     
     # browserstack credentials
-    export BROWSERSTACK_USERNAME=""
-    export BROWSERSTACK_ACCESS_KEY=""
+    #export BROWSERSTACK_USERNAME=""
+    #export BROWSERSTACK_ACCESS_KEY=""
 
     # set the build name, a build is a logical grouping of tests on the automate dashboard
     time_stamp=$(date +"%Y-%m-%d %H:%M:%S")
@@ -54,7 +54,7 @@ run_single_test(){
     # the browserstack fork of testcafe's browserstack integration
     browser="@browserStack/browserstack:chrome@84.0:Windows 10"
 
-    test_file="src/test/suites/login/test3.js"
+    test_file="src/test/suites/login/RedirectToSignInTest.js"
 
     $testcafe $browser $test_file --test-scheduling --reporter spec
 
@@ -65,7 +65,7 @@ run_parallel_1t_Nb(){
 
     
     #browser_list="@browserStack/browserstack:firefox@74.0:OS X High Sierra,@browserStack/browserstack:chrome@80.0:OS X High Sierra,@browserStack/browserstack:ie@11:Windows 10,@browserStack/browserstack:chrome@80.0:Windows 10,@browserStack/browserstack:firefox@75.0:Windows 8.1"
-    test_file="src/test/suites/offers/test9.js"
+    test_file="src/test/suites/offers/GPSLocationTest.js"
 
 
     #$testcafe "$browser_list"  $test_file --test-scheduling --reporter spec
@@ -149,28 +149,28 @@ bstack_logic(){
     #start local 
     start_local
 
-    if   [ $suite == "single" ]; then
+    if   [ $profile == "single" ]; then
         run_single_test 
 
-    elif [ $suite == "parallel" ]; then
+    elif [ $profile == "parallel" ]; then
         run_all_fixtures
 
-    elif [ $suite == "parallel-browsers" ]; then
+    elif [ $profile == "parallel-browsers" ]; then
         run_parallel_1t_Nb
 
-    elif [ $suite == "local" ]; then
+    elif [ $profile == "local" ]; then
         export TEST_BASE_URL="http://localhost:3000/"
         run_single_test 
 
-    elif [ $suite == "local-parallel" ]; then
+    elif [ $profile == "local-parallel" ]; then
         export TEST_BASE_URL="http://localhost:3000/"
         run_all_fixtures
 
-    elif [ $suite == "local-parallel-browsers" ]; then
+    elif [ $profile == "local-parallel-browsers" ]; then
         export TEST_BASE_URL="http://localhost:3000/"
         run_parallel_1t_Nb
     else
-        echo "invalid suite option; suite should be from (\"single\", \"local\", \"parallel-1\", \"parallel-2\", \"parallel-3\", \"e2e_ip_geolocation\""
+        echo "invalid profile option; profile should be from (\"single\", \"local\", \"parallel\", \"parallel-browsers\", \"local-parallel\", \"local-parallel-browsers\""
     fi
 
     end_local
@@ -179,47 +179,40 @@ bstack_logic(){
 
 run_single_test_on_prem(){
     browser="firefox"
-    test_file="src/test/suites/product/test2.js"
+    test_file="src/test/suites/login/RedirectToSignInTest.js"
     $testcafe "$browser"  $test_file  --test-scheduling   --reporter spec
 }
 
 
 run_suite_on_prem(){
     browser="chrome"
-    test_file1="src/test/suites/product/test1.js"
-    test_file2="src/test/suites/product/test2.js"
-    test_file3="src/test/suites/login/test3.js"
-    test_file4="src/test/suites/login/test4.js"
-    test_file5="src/test/suites/user/test5.js"
-    test_file6="src/test/suites/user/test6.js"
-    test_file7="src/test/suites/user/test7.js"
-    test_file8="src/test/suites/e2e/test8.js"
-    test_file9="src/test/suites/offers/test9.js"
-    $testcafe "$browser"  $test_file1  --test-scheduling   --reporter spec &&
-    $testcafe "$browser"  $test_file2  --test-scheduling   --reporter spec &&
-    $testcafe "$browser"  $test_file3  --test-scheduling   --reporter spec &&
-    $testcafe "$browser"  $test_file4  --test-scheduling   --reporter spec &&
-    $testcafe "$browser"  $test_file5  --test-scheduling   --reporter spec &&
-    $testcafe "$browser"  $test_file6  --test-scheduling   --reporter spec &&
-    $testcafe "$browser"  $test_file7  --test-scheduling   --reporter spec &&
-    $testcafe "$browser"  $test_file8  --test-scheduling   --reporter spec &&
-    $testcafe "$browser"  $test_file9  --test-scheduling   --reporter spec 
+    test_base_path="src/test/suites"
+
+
+    # iterate through all the files in the test_base_path diretory
+    for test_path in $(find $test_base_path -type f -print)
+    do
+        $testcafe "$browser"  "$test_path"  --test-scheduling   --reporter spec 
+        wait
+    done
+    echo ""
+
 }
 
 
 
 
 on_prem_logic(){
-    common_env
+    export TEST_BASE_URL="http://bstackdemo.com/"
 
-    if   [ $suite == "single" ]; then
+    if   [ $profile == "single" ]; then
         run_single_test_on_prem
 
-    elif [ $suite == "suite" ]; then
+    elif [ $profile == "suite" ]; then
         run_suite_on_prem
 
     else
-        echo "invalid suite option; suite should be from (\"single\", \"local\", \"parallel-1\", \"parallel-2\", \"parallel-3\", \"e2e_ip_geolocation\""
+        echo "invalid profile option; profile should be from (\"single\", \"local\", \"parallel-1\", \"parallel-2\", \"parallel-3\", \"e2e_ip_geolocation\""
     fi
 }
 
@@ -232,14 +225,14 @@ docker_logic(){
 
 
 #run_all_fixtures
-# launch remote or on-prem tests.
-# remote tests would run on browserstack, on-prem tests would launch on the local machine.
+# launch bstack or on-prem tests.
+# bstack tests would run on browserstack, on-prem tests would launch on the local machine.
 
 if   [ $env_type == "bstack" ]; then
-    bstack_logic suite
+    bstack_logic profile
 
 elif [ $env_type == "on-prem" ]; then
-    on_prem_logic suite
+    on_prem_logic profile
 
 elif [ $env_type == "docker" ]; then
     docker_logic

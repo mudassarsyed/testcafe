@@ -1,7 +1,7 @@
 import { Selector } from 'testcafe';
 import { userRolesDict } from '../../utils/roles/roles'
 
-fixture("Click on Sign In button and Login as image_not_loading_user")
+fixture("user")
     .page(process.env.TEST_BASE_URL);
 
 

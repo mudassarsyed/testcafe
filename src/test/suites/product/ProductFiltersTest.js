@@ -30,8 +30,6 @@ test("Apply Apple and Samsung Filters", async (t) => {
     await t
     .expect(newNumber <= prevNumber).ok()
 
-    //console.log(prevNumber);
-    console.log(newNumber);
         
 })
 

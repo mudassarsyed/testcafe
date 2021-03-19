@@ -12,7 +12,6 @@ test("Click on favourites Nav Item", async (t) => {
 
     await t
         .click(favouritesButton)
-        .wait(3000)
         .expect(signInButtonExists)
-        .ok();
+        .ok('',{ timeout: 10000 });
     })

@@ -1,7 +1,7 @@
 import { Selector, ClientFunction } from 'testcafe';
 
 
-fixture("login")
+fixture("offers")
     .page(process.env.TEST_BASE_URL);
 
 
@@ -14,7 +14,7 @@ const submitAction_1 = ClientFunction(() => {
 });
 
 
-test("Click on Sign In button and Login as existing_orders_user and click on orders Nav item", async (t) => {
+test("Set GPS location to Mumbai, Click on Sign In button, Login as fav_user and click on Offers", async (t) => {
 
     const userName          = "fav_user";
     const password          = "testingisfun99";
