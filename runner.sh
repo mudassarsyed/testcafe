@@ -8,6 +8,7 @@
 # a broad range of usecases
 env_type=$1
 profile=$2
+testfile_arg=$3
 
 # define testcafe location
 testcafe="./node_modules/.bin/testcafe"
@@ -48,14 +49,21 @@ common_env(){
 run_single_test(){
 
     # set the common env variables from the `common_env` function defined above
-    common_env
+    common_env 
 
     # note the `@browserStack/browserstack:` before the browser name; this is because we are using
     # the browserstack fork of testcafe's browserstack integration
     browser="@browserStack/browserstack:chrome@84.0:Windows 10"
 
-    test_file="src/test/suites/login/RedirectToSignInTest.js"
+    # if test_name arg was empty set default testname
+    if [ -z $testfile_arg ]; then
+        test_file="src/test/suites/e2e/E2ETest.js"
+    # else set test_file to testfile_arg
+    else
+        test_file=$testfile_arg
+    fi
 
+    #echo "$test_file"
     $testcafe $browser $test_file --test-scheduling --reporter spec
 
 }
@@ -79,6 +87,22 @@ run_parallel_1t_Nb(){
 }
 
 
+run_all_fixtures_temp(){
+    test_base_path="src/test/suites/user/"
+    browser="browserstack:firefox@74.0:OS X High Sierra"
+
+    testcafe "$browser"  "$test_base_path" -c 3 --test-scheduling 
+
+}
+
+run_all_fixtures_temp1(){
+    test_base_path="src/test/suites/user/"
+    browser="@browserStack/browserstack:firefox@74.0:OS X High Sierra,@browserStack/browserstack:firefox@74.0:OS X High Sierra,@browserStack/browserstack:firefox@74.0:OS X High Sierra"
+
+    $testcafe "$browser"  "$test_base_path"  --test-scheduling 
+
+}
+
 #
 run_all_fixtures(){
 
@@ -90,7 +114,7 @@ run_all_fixtures(){
     # we would execute all the tests in batches of max_parallel tests. Thus
     # at a given time a max of max_parallel tests would be running in parallel
     # this helps prevent queuing and test dropping
-    max_parallels=9
+    max_parallels=5
 
     # the i counter helps in creating the batches
     i=0
@@ -177,9 +201,20 @@ bstack_logic(){
 }
 
 
+
+
+
+
 run_single_test_on_prem(){
-    browser="firefox"
-    test_file="src/test/suites/login/RedirectToSignInTest.js"
+    browser="chrome"
+    # if test_name arg was empty set default testname
+    if [ -z $testfile_arg ]; then
+        test_file="src/test/suites/e2e/E2ETest.js"
+    # else set test_file to testfile_arg
+    else
+        test_file=$testfile_arg
+    fi
+
     $testcafe "$browser"  $test_file  --test-scheduling   --reporter spec
 }
 
@@ -229,10 +264,10 @@ docker_logic(){
 # bstack tests would run on browserstack, on-prem tests would launch on the local machine.
 
 if   [ $env_type == "bstack" ]; then
-    bstack_logic profile
+    bstack_logic 
 
 elif [ $env_type == "on-prem" ]; then
-    on_prem_logic profile
+    on_prem_logic 
 
 elif [ $env_type == "docker" ]; then
     docker_logic
