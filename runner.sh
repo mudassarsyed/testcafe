@@ -26,9 +26,10 @@ common_env(){
     #export BROWSERSTACK_ACCESS_KEY=""
 
     # set the build name, a build is a logical grouping of tests on the automate dashboard
-    #time_stamp=$(date +"%Y-%m-%d %H:%M:%S")
-    #export BROWSERSTACK_BUILD_ID="test-cafe-{$(date +"%Y-%m-%d %H:%M:%S")}"
+    # uncomment the line below if build id should be date + time
+    # export BROWSERSTACK_BUILD_ID="test-cafe-{$(date +"%Y-%m-%d %H:%M:%S")}"
 
+    # set buildname to epoch
     export BROWSERSTACK_BUILD_ID="$(date +"%s")" 
 
     # enable/ disable the debugging logs generated
@@ -249,7 +250,8 @@ on_prem_logic(){
 
 docker_logic(){
 
-    testfile_arg=$2
+    # in docker the second arg is missing
+    testfile_arg=$profile
 
     # if test_name arg was empty set default testname
     if [ -z $testfile_arg ]; then
