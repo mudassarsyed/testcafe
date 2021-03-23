@@ -26,8 +26,10 @@ common_env(){
     #export BROWSERSTACK_ACCESS_KEY=""
 
     # set the build name, a build is a logical grouping of tests on the automate dashboard
-    time_stamp=$(date +"%Y-%m-%d %H:%M:%S")
-    export BROWSERSTACK_BUILD_ID="test-cafe-{$(date +"%Y-%m-%d %H:%M:%S")}"
+    #time_stamp=$(date +"%Y-%m-%d %H:%M:%S")
+    #export BROWSERSTACK_BUILD_ID="test-cafe-{$(date +"%Y-%m-%d %H:%M:%S")}"
+
+    export BROWSERSTACK_BUILD_ID="$(date +"%s")" 
 
     # enable/ disable the debugging logs generated
     export BROWSERSTACK_DEBUG="true"
@@ -87,23 +89,8 @@ run_parallel_1t_Nb(){
 }
 
 
-run_all_fixtures_temp(){
-    test_base_path="src/test/suites/user/"
-    browser="browserstack:firefox@74.0:OS X High Sierra"
 
-    testcafe "$browser"  "$test_base_path" -c 3 --test-scheduling 
 
-}
-
-run_all_fixtures_temp1(){
-    test_base_path="src/test/suites/user/"
-    browser="@browserStack/browserstack:firefox@74.0:OS X High Sierra,@browserStack/browserstack:firefox@74.0:OS X High Sierra,@browserStack/browserstack:firefox@74.0:OS X High Sierra"
-
-    $testcafe "$browser"  "$test_base_path"  --test-scheduling 
-
-}
-
-#
 run_all_fixtures(){
 
     # base path to folder where all the test files are 
@@ -173,7 +160,11 @@ bstack_logic(){
     #start local 
     start_local
 
-    if   [ $profile == "single" ]; then
+
+    if [ -z $profile ]; then
+        run_single_test
+
+    elif [ $profile == "single" ]; then
         run_single_test 
 
     elif [ $profile == "parallel" ]; then
@@ -240,22 +231,37 @@ run_suite_on_prem(){
 on_prem_logic(){
     export TEST_BASE_URL="http://bstackdemo.com/"
 
-    if   [ $profile == "single" ]; then
+    if [ -z $profile ]; then
+        run_single_test_on_prem
+
+    elif [ $profile == "single" ]; then
         run_single_test_on_prem
 
     elif [ $profile == "suite" ]; then
         run_suite_on_prem
 
     else
-        echo "invalid profile option; profile should be from (\"single\", \"local\", \"parallel-1\", \"parallel-2\", \"parallel-3\", \"e2e_ip_geolocation\""
+        echo "invalid profile option; profile should be from (\"single\", \"suite\")"
     fi
 }
 
 
 
 docker_logic(){
-    docker run -e TEST_BASE_URL='http://bstackdemo.com/' -p 1337:1337 -p 1338:1338 -v /Users/madhav/Desktop/dev/browserstack-testcafe/src/test:/test -it testcafe/testcafe firefox  --hostname localhost remote test/suites/login/test3.js
+
+    testfile_arg=$2
+
+    # if test_name arg was empty set default testname
+    if [ -z $testfile_arg ]; then
+        test_file="src/test/suites/login/LockedUserTest.js"
+    # else set test_file to testfile_arg
+    else
+        test_file=$testfile_arg
+    fi
+
+    docker run -e TEST_BASE_URL='http://bstackdemo.com/' -p 1337:1337 -p 1338:1338 -v "$(pwd)/src:/src" -it testcafe/testcafe firefox  --hostname localhost remote $test_file
 }
+
 
 
 
