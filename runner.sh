@@ -14,6 +14,33 @@ testfile_arg=$3
 testcafe="./node_modules/.bin/testcafe"
 
 
+
+# select binary based on OS detected
+if [ "$(uname)" == "Darwin" ]; then
+    # set local binary path to mac os local binary
+    local_binary="resources/local/BrowserStackLocal_mac_os"
+
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+    # check for 64 bit vs 32 bit and set path to appropriate binary
+    if $(uname -m | grep '64'); then
+        local_binary="resources/local/BrowserStackLocal_linux_64"
+    else
+        local_binary="resources/local/BrowserStackLocal_linux_32"
+    fi
+
+elif [ "$(expr substr $(uname -s) 1 5)" == "MINGW" ]; then
+    # windows detected, use the windows binary
+    local_binary="resources/local/BrowserStackLocal.exe"
+
+else
+    echo "couldn't detect OS, comment out the above if else ladder for binary selection  and hardcode the path to the appropriate binary file in ./resources/local/ based on OS"
+    exit 0
+
+fi
+
+
+
+
 # set some environment variables which would be common to all tests
 common_env(){
     # use Automate API, higher stability, more debug logs
@@ -137,7 +164,7 @@ start_local()
     # local testing allows you to test on internal environments like a locally hosted webapp
     echo "local start"
     # start the local binary
-    resources/local/BrowserStackLocal --key $BROWSERSTACK_ACCESS_KEY --local-identifier TestCafe --daemon start;
+    $local_binary --key $BROWSERSTACK_ACCESS_KEY --local-identifier TestCafe --daemon start;
 }
 
 end_local(){
@@ -145,7 +172,7 @@ end_local(){
     wait
     echo "local end"
     # close the local binary
-    resources/local/BrowserStackLocal --key $BROWSERSTACK_ACCESS_KEY --local-identifier TestCafe --daemon stop;
+    $local_binary --key $BROWSERSTACK_ACCESS_KEY --local-identifier TestCafe --daemon stop;
 }
 
 #$testcafe "$browser"  $test_file  --test-scheduling   -r html:reports/report.html
@@ -163,16 +190,25 @@ bstack_logic(){
 
 
     if [ -z $profile ]; then
+        # runs single test
         run_single_test
 
     elif [ $profile == "single" ]; then
+        # runs single test
         run_single_test 
 
     elif [ $profile == "parallel" ]; then
+        # runs all test in parallel, you can set max parallels in the run_all_fixtures
+        # function. 
         run_all_fixtures
 
     elif [ $profile == "parallel-browsers" ]; then
+        # runs a single test on multiple browsers in parallel
+        # covers both mobile and desktop browsers
         run_parallel_1t_Nb
+
+    # all the below profiles are similar to the above profiles except, 
+    # the test base url is set to a localhost address. 
 
     elif [ $profile == "local" ]; then
         export TEST_BASE_URL="http://localhost:3000/"
@@ -189,6 +225,7 @@ bstack_logic(){
         echo "invalid profile option; profile should be from (\"single\", \"local\", \"parallel\", \"parallel-browsers\", \"local-parallel\", \"local-parallel-browsers\""
     fi
 
+    # end local binary
     end_local
 }
 
@@ -236,9 +273,11 @@ on_prem_logic(){
         run_single_test_on_prem
 
     elif [ $profile == "single" ]; then
+        # runs a single test
         run_single_test_on_prem
 
     elif [ $profile == "suite" ]; then
+        # runs all 9 tests sequentially
         run_suite_on_prem
 
     else
@@ -272,12 +311,15 @@ docker_logic(){
 # bstack tests would run on browserstack, on-prem tests would launch on the local machine.
 
 if   [ $env_type == "bstack" ]; then
+    # running tests on browserstack
     bstack_logic 
 
 elif [ $env_type == "on-prem" ]; then
+    # running tests on premise (locally)
     on_prem_logic 
 
 elif [ $env_type == "docker" ]; then
+    # runner tests on your testcafe docker instance
     docker_logic
 
 else
