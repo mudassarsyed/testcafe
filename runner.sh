@@ -94,25 +94,26 @@ run_single_test(){
     fi
 
     #echo "$test_file"
-    $testcafe $browser $test_file --test-scheduling --reporter spec
+    $testcafe $browser $test_file --test-scheduling --reporter spec 
 
 }
 
 # run one test on multiple browsers
 run_parallel_1t_Nb(){
 
+    test_base_path="src/test/suites"
+
+    for test_path in $(find $test_base_path -type f -print)
+    do
     
-    #browser_list="@browserStack/browserstack:firefox@74.0:OS X High Sierra,@browserStack/browserstack:chrome@80.0:OS X High Sierra,@browserStack/browserstack:ie@11:Windows 10,@browserStack/browserstack:chrome@80.0:Windows 10,@browserStack/browserstack:firefox@75.0:Windows 8.1"
-    test_file="src/test/suites/offers/GPSLocationTest.js"
-
-
-    #$testcafe "$browser_list"  $test_file --test-scheduling --reporter spec
-    $testcafe "@browserStack/browserstack:firefox@74.0:OS X High Sierra"  $test_file --test-scheduling --reporter spec &
-    $testcafe "@browserStack/browserstack:chrome@80.0:OS X High Sierra"  $test_file --test-scheduling --reporter spec &
-    $testcafe "@browserStack/browserstack:firefox@75.0:Windows 8.1"  $test_file --test-scheduling --reporter spec &
-    $testcafe "@browserStack/browserstack:Samsung Galaxy S20@10.0"  $test_file --test-scheduling --reporter spec &
-    $testcafe "@browserStack/browserstack:iPhone XS@13.0"  $test_file --test-scheduling --reporter spec
-
+        $testcafe "@browserStack/browserstack:firefox@74.0:OS X High Sierra"  $test_path --test-scheduling --reporter spec &
+        $testcafe "@browserStack/browserstack:chrome@80.0:OS X High Sierra"  $test_path --test-scheduling --reporter spec &
+        $testcafe "@browserStack/browserstack:firefox@75.0:Windows 8.1"  $test_path --test-scheduling --reporter spec &
+        $testcafe "@browserStack/browserstack:Samsung Galaxy S20@10.0"  $test_path --test-scheduling --reporter spec &
+        $testcafe "@browserStack/browserstack:iPhone XS@13.0"  $test_path --test-scheduling --reporter spec
+        wait
+    
+    done
 
 }
 
@@ -244,7 +245,7 @@ run_single_test_on_prem(){
         test_file=$testfile_arg
     fi
 
-    $testcafe "$browser"  $test_file  --test-scheduling   --reporter spec
+    $testcafe "$browser"  $test_file  --test-scheduling   --reporter spec 
 }
 
 
@@ -257,7 +258,7 @@ run_suite_on_prem(){
     for test_path in $(find $test_base_path -type f -print)
     do
         $testcafe "$browser"  "$test_path"  --test-scheduling   --reporter spec 
-        wait
+        
     done
     echo ""
 

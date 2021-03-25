@@ -2,8 +2,8 @@ import { Selector, t } from 'testcafe';
 
 class LoginPage {
     constructor () {
-        this.userNameInput = Selector('#react-select-2-input');
-        this.passwordInput = Selector('#react-select-3-input');
+        this.userNameInput = Selector('#username');
+        this.passwordInput = Selector('#password');
         this.loginButton = Selector('#login-btn');
     }
 

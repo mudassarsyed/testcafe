@@ -2,12 +2,16 @@ import { Selector, t } from 'testcafe';
 
 class HomePage {
     constructor () {
-        this.addToCartButton = Selector('.shelf-item__buy-btn');
+        this.addToCartButton= Selector('.shelf-item__buy-btn');
         this.checkoutButton = Selector('.buy-btn');
-        this.orderButton = Selector('#orders');
-        this.signInButton = Selector('#signin');
+        this.orderButton    = Selector('#orders');
+        this.signInButton   = Selector('#signin');
+        const prices        = Selector('.shelf-item__price')
+                                .child('.val')
+                                .child('b');
     }
 
+    // adds 'quantity' number of devices of 'deviceIndex' type to cart
     async addToCart (deviceIndex, quantity) {
 
         for(let i=0; i<quantity; i++){
@@ -32,6 +36,11 @@ class HomePage {
         await t.
         click(this.signInButton);
 
+    }
+
+    async getPrice(deviceIndex){
+        let price = Number(await prices.nth(deviceIndex).innerText);
+        return price
     }
 }
 

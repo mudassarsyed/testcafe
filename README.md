@@ -81,15 +81,11 @@ This infrastructure points to running the tests on your own machine using a brow
 
   To run the default test scenario (e.g. End to End Scenario) on your own machine, use the following command:
 
-  shell:
-
   ```sh
   sh runner.sh on-prem single
   ```
 
   To run a specific test scenario, use the following command with the additional 'relative-test-path' argument:
-
-  shell:
 
   ```sh
   sh runner.sh on-prem single "<relative-test-path>"
@@ -108,8 +104,6 @@ This infrastructure points to running the tests on your own machine using a brow
 - How to run the test?
 
   To run the entire test suite on your own machine, use the following command:
-
-  shell:
 
   ```sh
   sh runner.sh on-prem suite
@@ -145,15 +139,11 @@ This infrastructure points to running the tests on your own machine using a brow
 
   - To run the default test scenario (e.g. End to End Scenario) on your own machine, use the following command:
 
-  shell:
-
   ```sh
   sh runner.sh docker
   ```
 
   To run a specific test scenario, use the following command with the additional 'relative-test-path' argument:
-
-  shell:
 
   ```sh
   sh runner.sh docker single "<relative-test-path>"
@@ -208,14 +198,11 @@ In this section, we will run a single test on Chrome browser on Browserstack. To
 
   - To run the default test scenario (e.g. End to End Scenario) on your own machine, use the following command:
 
-  shell:
-
   ```sh
   sh runner.sh bstack single
   ```
 
   To run a specific test scenario, use the following command with the additional 'relative-test-path' argument:
-  shell:
 
   ```sh
   sh runner.sh bstack single "<relative-test-path>"
@@ -237,8 +224,6 @@ In this section, we will run the tests in parallel on a single browser on Browse
 
   To run the entire test suite in parallel on a single BrowserStack browser, use the following command:
 
-  shell:
-
   ```sh
   sh runner.sh bstack parallel
   ```
@@ -248,6 +233,18 @@ In this section, we will run the tests in parallel on a single browser on Browse
   This run profile executes the entire test suite in parallel on a single BrowserStack browser. Please refer to your [BrowserStack dashboard](https://automate.browserstack.com/) for test results.
 
   - Note: By default, this execution would run maximum 5 test threads in parallel on BrowserStack. Refer to the section ["Configuring the maximum parallel test threads for this repository"](#Configuring-the-maximum-parallel-test-threads-for-this-repository) for updating the parallel thread count based on your requirements.
+
+### Run the entire test suite in parallel on multiple BrowserStack browsers
+
+In this section, we will run the tests in parallel on multiple browsers on Browserstack. Refer to the `run_parallel_1t_Nb` function in `runner.sh` file to change test capabilities for this configuration.
+
+- How to run the test?
+
+  To run the entire test suite in parallel on multiple BrowserStack browsers, use the following command:
+
+  ```sh
+  sh runner.sh bstack parallel-browsers
+  ```
 
 ### [Web application hosted on internal environment] Running your tests on BrowserStack using BrowserStackLocal
 
@@ -270,15 +267,11 @@ In this section, we will run the tests in parallel on a single browser on Browse
 
   - To run the default test scenario (e.g. End to End Scenario) on a single BrowserStack browser using BrowserStackLocal, use the following command:
 
-  shell:
-
   ```sh
   sh runner.sh bstack local
   ```
 
   To run a specific test scenario, use the following command with the additional 'relative-test-path' argument:
-
-  shell:
 
   ```sh
   sh runner.sh bstack local "<relative-test-path>"
@@ -299,7 +292,6 @@ In this section, we will run the test cases to test the internally hosted websit
 - How to run the test?
 
   To run the entire test suite in parallel on a single BrowserStack browser using BrowserStackLocal, use the following command:
-  shell:
 
   ```sh
   sh runner.sh bstack local-parallel
@@ -310,6 +302,18 @@ In this section, we will run the test cases to test the internally hosted websit
   This run profile executes the entire test suite on an internally hosted web application on a single browser on BrowserStack. Please refer to your [BrowserStack dashboard](https://automate.browserstack.com/) for test results.
 
 - Note: By default, this execution would run maximum 5 test threads in parallel on BrowserStack. Refer to the section ["Configuring the maximum parallel test threads for this repository"](#Configuring-the-maximum-parallel-test-threads-for-this-repository) for updating the parallel thread count based on your requirements.
+
+### [Web application hosted on internal environment] Run the entire test suite in parallel on multiple BrowserStack browsers
+
+In this section, we will run the tests in parallel on multiple browsers on Browserstack. Refer to the `run_parallel_1t_Nb` function in `runner.sh` file to change test capabilities for this configuration.
+
+- How to run the test?
+
+  To run the entire test suite in parallel on multiple BrowserStack browsers, use the following command:
+
+  ```sh
+  sh runner.sh bstack local-parallel-browsers
+  ```
 
 ## Generating Reports
 

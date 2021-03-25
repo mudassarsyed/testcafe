@@ -5,12 +5,9 @@ fixture("offers")
     .page(process.env.TEST_BASE_URL);
 
 
-const submitAction = ClientFunction(() => {
-    navigator.geolocation.getCurrentPosition = function(cb){cb({ coords: {accuracy: 20,altitude: null,altitudeAccuracy: null,heading: null,latitude: 19.043192,longitude: 72.86305240000002,speed: null}}); };
-});
 
-const submitAction_1 = ClientFunction(() => {
-    window.navigator.geolocation.getCurrentPosition = function(cb){cb({ coords: {accuracy: 20,altitude: null,altitudeAccuracy: null,heading: null,latitude: 19.043192,longitude: 72.86305240000002,speed: null}}); }
+const submitAction = ClientFunction(() => {
+    window.navigator.geolocation.getCurrentPosition = function(cb){cb({ coords: {accuracy: 20,altitude: null,altitudeAccuracy: null,heading: null,latitude: 1,longitude: 103,speed: null}}); }
 });
 
 
@@ -27,7 +24,6 @@ test("Set GPS location to Mumbai, Click on Sign In button, Login as fav_user and
     const offersCount       = ordersList.count;
         
     await submitAction();
-    await submitAction_1();
     await t
         .click(signInButton)
         .typeText(userNameInput,userName)
