@@ -6,10 +6,11 @@ fixture("login")
 
 test("Click on favourites Nav Item", async (t) => {
 
-
+    // selectors
     const favouritesButton = Selector('#favourites');
     const signInButtonExists = Selector('#login-btn').exists;
 
+    // test
     await t
         .click(favouritesButton)
         .expect(signInButtonExists)

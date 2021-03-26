@@ -7,9 +7,11 @@ fixture("user")
 
 test("[Wrong Test]Click on Sign In button and Login as image_not_loading_user", async (t) => {
 
+    // selectorss
     const images        = Selector('img')
     const numberOfItems = await images.count;
     
+    // login with credentials
     await t
         .useRole(userRolesDict['image_not_loading_user']);
 

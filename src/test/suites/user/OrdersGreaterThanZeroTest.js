@@ -8,10 +8,12 @@ fixture("user")
 
 test("Click on Sign In button and Login as existing_orders_user and click on orders Nav item", async (t) => {
 
+    // selectors
     const ordersNavButton   = Selector('#orders');
     const ordersList        = Selector('.order');
     const ordersCount       = ordersList.count;
     
+    // test
     await t
         .useRole(userRolesDict['existing_orders_user'])
         .click(ordersNavButton)

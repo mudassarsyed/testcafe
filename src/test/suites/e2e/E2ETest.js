@@ -20,8 +20,8 @@ test("Click on Sign In button and Login as fav_user ,add 3 items to cart, click 
     // page object files. This is an example of the Page Object Model where a logical
     // abstraction of each page in the application to be tested is made.
 
-    // the below test adds 1 instance each of devices with index 0, 1 and 4 to the cart and purchases them
-    // finally it validates if the 3 purchases are visible on the Orders Page
+    // the below test adds 3 instance each of device with index 0 to the cart and purchases them
+    // finally it validates if the purchases are visible on the Orders Page
     await HomePage.goToSignInPage()
     await LoginPage.login(username, password)
     await HomePage.addToCart(0,3)

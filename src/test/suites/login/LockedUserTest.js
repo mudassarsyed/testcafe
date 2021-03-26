@@ -5,6 +5,7 @@ fixture("login")
 
 test("Click on Sign In button and Login as locked_user", async (t) => {
 
+    // selectors
     const userName             = "locked_user";
     const password             = "testingisfun99";
     const signInButton         = Selector('#signin');
@@ -14,6 +15,8 @@ test("Click on Sign In button and Login as locked_user", async (t) => {
     const errorMessage         = Selector('.api-error');
     const expectedErrorMessage = "Your account has been locked.";
      
+    // test
+    // Note: could have used `roles` here for login too.
     await t
         .click(signInButton)
         .typeText(userNameInput,userName)

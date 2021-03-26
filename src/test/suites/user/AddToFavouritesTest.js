@@ -7,13 +7,14 @@ fixture("user")
     
 test("Click on Sign In button and Login as existing_orders_user, add items to favourite and click on favourites Nav Item", async (t) => {
 
-
+    // selectors
     const favouriteButton       = Selector(".shelf-stopper")
                                     .child("button");
     const favouritesNavButton   = Selector('#favourites');
     const favouriteList         = Selector('.shelf-item');
     const favouriteCount        = favouriteList.count;
 
+    // test
     await t
         .useRole(userRolesDict['existing_orders_user'])
         .click(favouriteButton.with({ visibilityCheck: true })())

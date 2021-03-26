@@ -65,6 +65,10 @@ common_env(){
     export BROWSERSTACK_VIDEO="true"
     export BROWSERSTACK_NETWORK_LOG="true"
 
+    # config file for extra browserstack capaabilities, we will be using it for
+    # the `maskCommands` capability which hides any typed test in the browserstack 
+    # text logs
+    export BROWSERSTACK_CAPABILITIES_CONFIG_PATH="$(pwd)/resources/config/browserstack-config.json"
 
     # we are setting the base url for the tests to run on,
     # we will overwrite this in the `run_local_test` function below 
@@ -161,7 +165,6 @@ run_all_fixtures(){
 start_local()
 {
     export BROWSERSTACK_LOCAL_IDENTIFIER="TestCafe"
-    # overwrite the base url defined in function `common_env` since we are trying out local-testing
     # local testing allows you to test on internal environments like a locally hosted webapp
     echo "local start"
     # start the local binary
@@ -210,6 +213,8 @@ bstack_logic(){
 
     # all the below profiles are similar to the above profiles except, 
     # the test base url is set to a localhost address. 
+    # overwrites the base_url set in function `common_env` since we are trying out local-testing
+
 
     elif [ $profile == "local" ]; then
         export TEST_BASE_URL="http://localhost:3000/"
@@ -234,7 +239,7 @@ bstack_logic(){
 
 
 
-
+# function runs a single test on-premise
 run_single_test_on_prem(){
     browser="chrome"
     # if test_name arg was empty set default testname
@@ -248,7 +253,7 @@ run_single_test_on_prem(){
     $testcafe "$browser"  $test_file  --test-scheduling   --reporter spec 
 }
 
-
+# function runs entire suite sequentially on-premise
 run_suite_on_prem(){
     browser="chrome"
     test_base_path="src/test/suites"
@@ -271,6 +276,7 @@ on_prem_logic(){
     export TEST_BASE_URL="http://bstackdemo.com/"
 
     if [ -z $profile ]; then
+        # if profile name is empty run single test
         run_single_test_on_prem
 
     elif [ $profile == "single" ]; then
