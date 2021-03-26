@@ -4,7 +4,7 @@ import { Selector } from 'testcafe';
 fixture("login")
     .page(process.env.TEST_BASE_URL);
 
-test("Click on favourites Nav Item", async (t) => {
+test("Navigated to Signin Page", async (t) => {
 
     // selectors
     const favouritesButton = Selector('#favourites');

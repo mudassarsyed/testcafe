@@ -3,7 +3,7 @@ import { Selector } from 'testcafe';
 fixture("login")
     .page(process.env.TEST_BASE_URL);
 
-test("Click on Sign In button and Login as locked_user", async (t) => {
+test("Login as Locked User", async (t) => {
 
     // selectors
     const userName             = "locked_user";

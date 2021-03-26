@@ -5,7 +5,7 @@ fixture("user")
     .page(process.env.TEST_BASE_URL);
 
     
-test("Click on Sign In button and Login as existing_orders_user, add items to favourite and click on favourites Nav Item", async (t) => {
+test("add items to favourite and click on favourites Nav Item", async (t) => {
 
     // selectors
     const favouriteButton       = Selector(".shelf-stopper")

@@ -5,7 +5,7 @@ fixture("user")
     .page(process.env.TEST_BASE_URL);
 
 
-test("[Wrong Test]Click on Sign In button and Login as image_not_loading_user", async (t) => {
+test("[Wrong Test]Login as User with no image loaded", async (t) => {
 
     // selectorss
     const images        = Selector('img')

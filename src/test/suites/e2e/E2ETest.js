@@ -9,7 +9,7 @@ fixture("e2e")
     .page(process.env.TEST_BASE_URL);
 
 
-test("Click on Sign In button and Login as fav_user ,add 3 items to cart, click on checkout, enter details, click on submit, click on continue shopping and click on orders nav item.", async (t) => {
+test("End to End Scenario", async (t) => {
 
     // login credentials for test
     const username = 'fav_user';

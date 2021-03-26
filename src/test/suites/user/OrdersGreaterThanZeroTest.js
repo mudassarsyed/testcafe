@@ -6,7 +6,7 @@ fixture("user")
 
 
 
-test("Click on Sign In button and Login as existing_orders_user and click on orders Nav item", async (t) => {
+test("This test verifies that existing orders are shown for user: \"existing_orders_user\"", async (t) => {
 
     // selectors
     const ordersNavButton   = Selector('#orders');

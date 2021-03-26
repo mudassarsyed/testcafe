@@ -12,7 +12,7 @@ const mockGeoLocationForMumbai = ClientFunction(() => {
 });
 
 
-test("Set GPS location to Mumbai, Click on Sign In button, Login as fav_user and click on Offers", async (t) => {
+test("Offers for Mumbai location", async (t) => {
 
     // selectors
     const offersNavButton   = Selector('#offers');
