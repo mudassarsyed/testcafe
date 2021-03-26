@@ -95,6 +95,12 @@ This infrastructure points to running the tests on your own machine using a brow
 
   E.g. "src/test/suites/offers/GPSLocationTest.js", "src/test/suites/login/LockedUserTest.js" or any of the other test paths from the project root, as outlined in [About the tests in this repository](#About-the-tests-in-this-repository) section.
 
+  For Example
+  ```sh
+  sh runner.sh on-prem single src/test/suites/login/LockedUserTest.js
+  ```
+
+
 - Output
 
   This run profile executes a specific test scenario on a single browser instance on your own machine.
@@ -152,6 +158,12 @@ This infrastructure points to running the tests on your own machine using a brow
   where, the argument 'relative-test-path' can be any relative path to a test in this repository.
 
   E.g. "src/test/suites/offers/GPSLocationTest.js", "src/test/suites/login/LockedUserTest.js" or any of the other test paths from the project root, as outlined in [About the tests in this repository](#About-the-tests-in-this-repository) section.
+
+  For Example
+  ```sh
+  sh runner.sh docker single src/test/suites/login/LockedUserTest.js
+  ```
+
 
   - After tests are complete, you can stop the Docker by running the following command:
 
@@ -211,6 +223,11 @@ In this section, we will run a single test on Chrome browser on Browserstack. To
   where, the argument 'relative-test-path' can be any relative path to a test in this repository.
 
   E.g. "src/test/suites/offers/GPSLocationTest.js", "src/test/suites/login/LockedUserTest.js" or any of the other test paths from the project root, as outlined in [About the tests in this repository](#About-the-tests-in-this-repository) section.
+
+  For Example
+  ```sh
+  sh runner.sh bstack single src/test/suites/login/LockedUserTest.js
+  ```
 
 - Output
 
@@ -280,6 +297,11 @@ In this section, we will run the tests in parallel on multiple browsers on Brows
   where, the argument 'relative-test-path' can be any relative path to a test in this repository.
 
   E.g. "src/test/suites/offers/GPSLocationTest.js", "src/test/suites/login/LockedUserTest.js" or any of the other test paths from the project root, as outlined in [About the tests in this repository](#About-the-tests-in-this-repository) section.
+
+  For Example
+  ```sh
+  sh runner.sh bstack local src/test/suites/login/LockedUserTest.js
+  ```
 
 - Output
 
