@@ -47,6 +47,8 @@ common_env(){
     export BROWSERSTACK_USE_AUTOMATE=1
     # use a lower API polling interval, higher stability
     export TESTCAFE_BROWSERSTACK_API_POLLING_INTERVAL="40000"
+
+    
     
     # browserstack credentials
     #export BROWSERSTACK_USERNAME=""
@@ -149,13 +151,13 @@ run_all_fixtures(){
         # processes have finished execution. In our case this means, it waits until a batch of max_parallel 
         # has finished execution
         if [ $((i%max_parallels)) == $((max_parallels-1)) ]; then
-            $testcafe "$browser"  "$test_path" --test-scheduling 
+            $testcafe "$browser"  "$test_path" --test-scheduling --skip-js-errors
             wait
         
         else
         # notice the & at the end. This means that the next test would be run in parallel with this test
         # this command is executed when i=0,1,...,max_parallel-2
-            $testcafe "$browser"  "$test_path" --test-scheduling &
+            $testcafe "$browser"  "$test_path" --test-scheduling --skip-js-errors &
         fi
         # increment i
         i=$((i+1))
@@ -297,7 +299,7 @@ on_prem_logic(){
 
 
 docker_logic(){
-
+    # docker-compose pull
     # starting docker compose
     docker-compose up -d
 
@@ -306,13 +308,13 @@ docker_logic(){
 
     # if test_name arg was empty set default testname
     if [ -z $testfile_arg ]; then
-        test_file="src/test/suites/login/LockedUserTest.js"
+        test_file="src/test/suites/e2e/E2ETest.js"
     # else set test_file to testfile_arg
     else
         test_file=$testfile_arg
     fi
 
-    docker run -e TEST_BASE_URL='http://bstackdemo.com/' -p 1337:1337 -p 1338:1338 -v "$(pwd)/src:/src" -it testcafe/testcafe firefox  --hostname localhost remote $test_file
+    docker run -e TEST_BASE_URL='http://bstackdemo.com/'  -v "$(pwd)/src:/src" -v "$(pwd)/resources:/resources" -it testcafe/testcafe firefox  --hostname localhost remote $test_file
 
     # close docker compose
     wait

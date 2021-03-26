@@ -6,7 +6,7 @@ fixture("user")
 
 
 
-test("This test verifies that existing orders are shown for user: \"existing_orders_user\"", async (t) => {
+test("Orders Greater than Zero", async (t) => {
 
     // selectors
     const ordersNavButton   = Selector('#orders');
