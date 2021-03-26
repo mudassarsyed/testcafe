@@ -125,7 +125,7 @@ run_parallel_1t_Nb(){
 
 
 
-
+# run all tests on bstack in parallel on one browser
 run_all_fixtures(){
 
     # base path to folder where all the test files are 
