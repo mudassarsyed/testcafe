@@ -56,8 +56,10 @@ common_env(){
     # uncomment the line below if build id should be date + time
     # export BROWSERSTACK_BUILD_ID="test-cafe-{$(date +"%Y-%m-%d %H:%M:%S")}"
 
-    # set buildname to epoch
-    export BROWSERSTACK_BUILD_ID="$(date +"%s")" 
+    # you can overwrite this name to set the buildname
+    BROWSERSTACK_BUILD_NAME="browserstack-examples-testcafe"
+    # set buildname to <BROWSERSTACK_BUILD_NAME>-epoch
+    export BROWSERSTACK_BUILD_ID=$BROWSERSTACK_BUILD_NAME+"-$(date +"%s")" 
 
     # enable/ disable the debugging logs generated
     export BROWSERSTACK_DEBUG="true"
@@ -296,6 +298,9 @@ on_prem_logic(){
 
 docker_logic(){
 
+    # starting docker compose
+    docker-compose up -d
+
     # in docker the second arg is missing
     testfile_arg=$profile
 
@@ -308,6 +313,11 @@ docker_logic(){
     fi
 
     docker run -e TEST_BASE_URL='http://bstackdemo.com/' -p 1337:1337 -p 1338:1338 -v "$(pwd)/src:/src" -it testcafe/testcafe firefox  --hostname localhost remote $test_file
+
+    # close docker compose
+    wait
+    docker-compose down
+
 }
 
 
