@@ -1,0 +1,4 @@
+{
+    "browserstack.maskCommands":    "setValues",
+    "browserstack.idleTimeout":    "300"
+}

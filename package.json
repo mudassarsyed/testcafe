@@ -1,0 +1,16 @@
+{
+
+  "scripts": {},
+
+  "dependencies": {
+
+    "@browserstack/testcafe": "^1.8.6",
+
+    "@browserstack/testcafe-browser-provider-browserstack": "^1.13.3",
+
+    "testcafe-reporter-html": "^1.4.6"
+
+  }
+
+}
+

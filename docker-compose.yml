@@ -1,0 +1,9 @@
+version: "3"
+services:
+  testcafe:
+    image: testcafe/testcafe
+    container_name: testcafe
+    working_dir: /
+    ports:
+      - "1337:1337"
+      - "1338:1338"
