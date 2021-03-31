@@ -86,13 +86,13 @@ This infrastructure points to running the tests on your own machine using a brow
   sh runner.sh on-prem single
   ```
 
-  To run a specific test scenario, use the following command with the additional '<relative-test-path>' argument:
+  To run a specific test scenario, use the following command with the additional `<relative-test-path>` argument:
 
   ```sh
   sh runner.sh on-prem single "<relative-test-path>"
   ```
 
-  where, the argument '<relative-test-path>' can be any relative path to a test in this repository.
+  where, the argument `<relative-test-path>` can be any relative path to a test in this repository.
 
   E.g. "src/test/suites/offers/GPSLocationTest.js", "src/test/suites/login/LockedUserTest.js" or any of the other test paths from the project root, as outlined in [About the tests in this repository](#About-the-tests-in-this-repository) section.
 
@@ -150,13 +150,13 @@ This infrastructure points to running the tests on your own machine using a brow
   sh runner.sh docker
   ```
 
-  To run a specific test scenario, use the following command with the additional '<relative-test-path>' argument:
+  To run a specific test scenario, use the following command with the additional `<relative-test-path>` argument:
 
   ```sh
   sh runner.sh docker single "<relative-test-path>"
   ```
 
-  where, the argument '<relative-test-path>' can be any relative path to a test in this repository.
+  where, the argument `<relative-test-path>` can be any relative path to a test in this repository.
 
   E.g. "src/test/suites/offers/GPSLocationTest.js", "src/test/suites/login/LockedUserTest.js" or any of the other test paths from the project root, as outlined in [About the tests in this repository](#About-the-tests-in-this-repository) section.
 
@@ -226,13 +226,13 @@ In this section, we will run a single test on Chrome browser on Browserstack. To
   sh runner.sh bstack single
   ```
 
-  To run a specific test scenario, use the following command with the additional '<relative-test-path>' argument:
+  To run a specific test scenario, use the following command with the additional `<relative-test-path>` argument:
 
   ```sh
   sh runner.sh bstack single "<relative-test-path>"
   ```
 
-  where, the argument '<relative-test-path>' can be any relative path to a test in this repository.
+  where, the argument `<relative-test-path>` can be any relative path to a test in this repository.
 
   E.g. "src/test/suites/offers/GPSLocationTest.js", "src/test/suites/login/LockedUserTest.js" or any of the other test paths from the project root, as outlined in [About the tests in this repository](#About-the-tests-in-this-repository) section.
 
@@ -301,13 +301,13 @@ In this section, we will run the tests in parallel on multiple browsers on Brows
   sh runner.sh bstack local
   ```
 
-  To run a specific test scenario, use the following command with the additional '<relative-test-path>' argument:
+  To run a specific test scenario, use the following command with the additional `<relative-test-path>` argument:
 
   ```sh
   sh runner.sh bstack local "<relative-test-path>"
   ```
 
-  where, the argument '<relative-test-path>' can be any relative path to a test in this repository.
+  where, the argument `<relative-test-path>` can be any relative path to a test in this repository.
 
   E.g. "src/test/suites/offers/GPSLocationTest.js", "src/test/suites/login/LockedUserTest.js" or any of the other test paths from the project root, as outlined in [About the tests in this repository](#About-the-tests-in-this-repository) section.
 
