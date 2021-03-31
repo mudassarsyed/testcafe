@@ -16,7 +16,6 @@ test("Login as Locked User", async (t) => {
     const expectedErrorMessage = "Your account has been locked.";
      
     // test
-    // Note: could have used `roles` here for login too.
     await t
         .click(signInButton)
         .typeText(userNameInput,userName)

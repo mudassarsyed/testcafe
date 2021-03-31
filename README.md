@@ -24,7 +24,7 @@ The TestCafe tests are run on different platforms like on-prem, docker and Brows
 
 To install bash on windows, just install GIT. During installation of GIT, add GIT Bash to windows context menu by selecting its option. After installation right click in your folder select `GIT Bash Here`. More details over [here](https://stackoverflow.com/questions/26522789/how-to-run-sh-on-windows-command-prompt)
 
-To install all the node modules dependencies, run the following command in the repository root
+To install all the node modules dependencies, run the following command in the repository root directory
 
 npm:
 
@@ -34,19 +34,19 @@ npm install
 
 ## About the tests in this repository
 
-This repository contains the following #{ Selenium test / Cypress / Puppeteer / Other } tests:
+This repository contains the following TestCafe tests:
 
-| Module  | Test name                          | Description                                                                                                                                                                                                                                                                       |
-| ------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| E2E     | E2ETest                | This test scenario verifies successful product purchase lifecycle end-to-end. It demonstrates the [Page Object Model design pattern](https://www.browserstack.com/guide/page-object-model-in-selenium) and is also the default test executed in all the single test run profiles. |
-| Login   | RedirectToSignInTest          | This test verifies the redirection to the signin page when user clicks favorite button.                                                                                                                                                                                                  |
-| Login   | LockedUserTest               | This test verifies the login workflow error for a locked user.                                                                                                                                                                                                                    |
-| Offers  | GPSLocationTest         | This test mocks the GPS location for Mumbai and verifies that the product offers applicable for the Mumbai location are shown.                                                                                                                                                    |
-| Product | ProductFiltersTest           | This test verifies that the number of product reduces when the vendor filter option is applied.                                                                                                                                                                           |
-| Product | HighToLowFilterTest   | This test verifies that the product prices are in ascending order when the product sort "Lowest to Highest" is applied.                                                                                                                                                           |
-| User    | ImageLoadTest | This test verifies that the product images load for user: "image_not_loading_user" on the e-commerce application. Since the images do not load, the test case assertion fails.                                                                                                    |
+| Module  | Test name                 | Description                                                                                                                                                                                                                                                                       |
+| ------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| E2E     | E2ETest                   | This test scenario verifies successful product purchase lifecycle end-to-end. It demonstrates the [Page Object Model design pattern](https://www.browserstack.com/guide/page-object-model-in-selenium) and is also the default test executed in all the single test run profiles. |
+| Login   | RedirectToSignInTest      | This test verifies the redirection to the signin page when user clicks favorite button.                                                                                                                                                                                           |
+| Login   | LockedUserTest            | This test verifies the login workflow error for a locked user.                                                                                                                                                                                                                    |
+| Offers  | GPSLocationTest           | This test mocks the GPS location for Mumbai and verifies that the product offers applicable for the Mumbai location are shown.                                                                                                                                                    |
+| Product | ProductFiltersTest        | This test verifies that the number of product reduces when the vendor filter option is applied.                                                                                                                                                                                   |
+| Product | HighToLowFilterTest       | This test verifies that the product prices are in ascending order when the product sort "Lowest to Highest" is applied.                                                                                                                                                           |
+| User    | ImageLoadTest             | This test verifies that the product images load for user: "image_not_loading_user" on the e-commerce application. Since the images do not load, the test case assertion fails.                                                                                                    |
 | User    | OrdersGreaterThanZeroTest | This test verifies that existing orders are shown for user: "existing_orders_user"                                                                                                                                                                                                |
-| User    | AddToFavouritesTest | This test verifies that a product is added to favourites list after clicking the favourites button on the home page                                                                                                                                                                                           |
+| User    | AddToFavouritesTest       | This test verifies that a product is added to favourites list after clicking the favourites button on the home page                                                                                                                                                               |
 
 ---
 
@@ -86,21 +86,21 @@ This infrastructure points to running the tests on your own machine using a brow
   sh runner.sh on-prem single
   ```
 
-  To run a specific test scenario, use the following command with the additional 'relative-test-path' argument:
+  To run a specific test scenario, use the following command with the additional '<relative-test-path>' argument:
 
   ```sh
   sh runner.sh on-prem single "<relative-test-path>"
   ```
 
-  where, the argument 'relative-test-path' can be any relative path to a test in this repository.
+  where, the argument '<relative-test-path>' can be any relative path to a test in this repository.
 
   E.g. "src/test/suites/offers/GPSLocationTest.js", "src/test/suites/login/LockedUserTest.js" or any of the other test paths from the project root, as outlined in [About the tests in this repository](#About-the-tests-in-this-repository) section.
 
   For Example
+
   ```sh
   sh runner.sh on-prem single src/test/suites/login/LockedUserTest.js
   ```
-
 
 - Output
 
@@ -150,21 +150,21 @@ This infrastructure points to running the tests on your own machine using a brow
   sh runner.sh docker
   ```
 
-  To run a specific test scenario, use the following command with the additional 'relative-test-path' argument:
+  To run a specific test scenario, use the following command with the additional '<relative-test-path>' argument:
 
   ```sh
   sh runner.sh docker single "<relative-test-path>"
   ```
 
-  where, the argument 'relative-test-path' can be any relative path to a test in this repository.
+  where, the argument '<relative-test-path>' can be any relative path to a test in this repository.
 
   E.g. "src/test/suites/offers/GPSLocationTest.js", "src/test/suites/login/LockedUserTest.js" or any of the other test paths from the project root, as outlined in [About the tests in this repository](#About-the-tests-in-this-repository) section.
 
   For Example
+
   ```sh
   sh runner.sh docker single src/test/suites/login/LockedUserTest.js
   ```
-
 
   - After tests are complete, you can stop the Docker by running the following command:
 
@@ -201,6 +201,17 @@ This infrastructure points to running the tests on your own machine using a brow
 
   Alternatively, you can also hardcode username and access_key objects in the `common_env` function in [runner.sh](runner.sh) file.
 
+- Download the appropriate BrowserStack local binary based on your operating system from [Local Testing docs ](https://www.browserstack.com/local-testing/automate) and set the path to the binary in the `local_binary` variable in the  [runner.sh](runner.sh) file.
+
+  For Example
+
+    After downloaded the appropriate binary from the [local testing docs](https://www.browserstack.com/local-testing/automate) to the `resources/local` directory in the project root directory, then in `runner.sh` set
+
+    ```sh
+    local_binary="resources/local/BrowserStackLocal"
+    ```
+
+
 ## Running Your Tests
 
 ### Run a specific test on BrowserStack
@@ -215,17 +226,18 @@ In this section, we will run a single test on Chrome browser on Browserstack. To
   sh runner.sh bstack single
   ```
 
-  To run a specific test scenario, use the following command with the additional 'relative-test-path' argument:
+  To run a specific test scenario, use the following command with the additional '<relative-test-path>' argument:
 
   ```sh
   sh runner.sh bstack single "<relative-test-path>"
   ```
 
-  where, the argument 'relative-test-path' can be any relative path to a test in this repository.
+  where, the argument '<relative-test-path>' can be any relative path to a test in this repository.
 
   E.g. "src/test/suites/offers/GPSLocationTest.js", "src/test/suites/login/LockedUserTest.js" or any of the other test paths from the project root, as outlined in [About the tests in this repository](#About-the-tests-in-this-repository) section.
 
   For Example
+
   ```sh
   sh runner.sh bstack single src/test/suites/login/LockedUserTest.js
   ```
@@ -289,17 +301,18 @@ In this section, we will run the tests in parallel on multiple browsers on Brows
   sh runner.sh bstack local
   ```
 
-  To run a specific test scenario, use the following command with the additional 'relative-test-path' argument:
+  To run a specific test scenario, use the following command with the additional '<relative-test-path>' argument:
 
   ```sh
   sh runner.sh bstack local "<relative-test-path>"
   ```
 
-  where, the argument 'relative-test-path' can be any relative path to a test in this repository.
+  where, the argument '<relative-test-path>' can be any relative path to a test in this repository.
 
   E.g. "src/test/suites/offers/GPSLocationTest.js", "src/test/suites/login/LockedUserTest.js" or any of the other test paths from the project root, as outlined in [About the tests in this repository](#About-the-tests-in-this-repository) section.
 
   For Example
+
   ```sh
   sh runner.sh bstack local src/test/suites/login/LockedUserTest.js
   ```
@@ -340,7 +353,7 @@ In this section, we will run the tests in parallel on multiple browsers on Brows
 
 ## Generating Reports
 
-- Generate Report using the following flag: `-r html:reports/report.html` in the testcafe command, the node package `testcafe-reporter-html` is needed. Other [test reporters](https://devexpress.github.io/testcafe/documentation/guides/concepts/reporters.html) can also be used
+- Generate Report using the following flag: `-r html:reports/report.html` in the testcafe command, the node package `testcafe-reporter-html` is used in the package.json for supporting this functionality. Other test reporters, as outlined in the TestCafe documentation [here](https://devexpress.github.io/testcafe/documentation/guides/concepts/reporters.html) can also be used
 
 ## Additional Resources
 

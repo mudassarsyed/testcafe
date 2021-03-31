@@ -14,30 +14,8 @@ testfile_arg=$3
 testcafe="./node_modules/.bin/testcafe"
 
 
-
-# select binary based on OS detected
-if [ "$(uname)" == "Darwin" ]; then
-    # set local binary path to mac os local binary
-    local_binary="resources/local/BrowserStackLocal_mac_os"
-
-elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-    # check for 64 bit vs 32 bit and set path to appropriate binary
-    if $(uname -m | grep '64'); then
-        local_binary="resources/local/BrowserStackLocal_linux_64"
-    else
-        local_binary="resources/local/BrowserStackLocal_linux_32"
-    fi
-
-elif [ "$(expr substr $(uname -s) 1 5)" == "MINGW" ]; then
-    # windows detected, use the windows binary
-    local_binary="resources/local/BrowserStackLocal.exe"
-
-else
-    echo "couldn't detect OS, comment out the above if else ladder for binary selection  and hardcode the path to the appropriate binary file in ./resources/local/ based on OS"
-    exit 0
-
-fi
-
+# set the path to the local binary
+local_binary=""
 
 
 
@@ -75,9 +53,18 @@ common_env(){
     export BROWSERSTACK_CAPABILITIES_CONFIG_PATH="$(pwd)/resources/config/browserstack-config.json"
 
     # we are setting the base url for the tests to run on,
-    # we will overwrite this in the `run_local_test` function below 
-    # and set it to a "localhost:3000" url to test the browserstack-local feature
     export TEST_BASE_URL="http://bstackdemo.com/"
+    # set base url to "localhost:3000" url to test the browserstack-local feature if profile name contains local
+    if [[ $profile == *"local"* ]]; then
+        export TEST_BASE_URL="http://localhost:3000/"
+    fi
+
+    # checks if local_binary variable  is set to the downloaded binary path 
+    # for more details check prerequisites under the browserstack section of the README
+    if [ -z $local_binary ]; then
+        echo "ERROR: download the browserstack local binary and set local_binary variable to hold the path to the downloaded local binary, check prerequisites under the browserstack section in the README for details "      
+        exit 0
+    fi
 
 
 }
@@ -107,6 +94,7 @@ run_single_test(){
 }
 
 # run one test on multiple browsers
+# runs 1 t on N browsers
 run_parallel_1t_Nb(){
 
     test_base_path="src/test/suites"
@@ -132,7 +120,7 @@ run_all_fixtures(){
 
     # base path to folder where all the test files are 
     test_base_path="src/test/suites"
-    browser="@browserStack/browserstack:firefox@74.0:OS X High Sierra"
+    browser="@browserStack/browserstack:chrome@84.0:Windows 10"
 
     # set this variable to the max number of parallels you have on browserstack
     # we would execute all the tests in batches of max_parallel tests. Thus
@@ -217,19 +205,19 @@ bstack_logic(){
 
     # all the below profiles are similar to the above profiles except, 
     # the test base url is set to a localhost address. 
-    # overwrites the base_url set in function `common_env` since we are trying out local-testing
-
 
     elif [ $profile == "local" ]; then
-        export TEST_BASE_URL="http://localhost:3000/"
+        # runs single test on localhost:3000 (internal url)
         run_single_test 
 
     elif [ $profile == "local-parallel" ]; then
-        export TEST_BASE_URL="http://localhost:3000/"
+        # runs all test on localhost:3000 (internal url) in parallel, you can set max parallels in the run_all_fixtures
+        # function. 
         run_all_fixtures
 
     elif [ $profile == "local-parallel-browsers" ]; then
-        export TEST_BASE_URL="http://localhost:3000/"
+        # runs a single test on localhost:3000 (internal url) across multiple browsers in parallel
+        # covers both mobile and desktop browsers
         run_parallel_1t_Nb
     else
         echo "invalid profile option; profile should be from (\"single\", \"local\", \"parallel\", \"parallel-browsers\", \"local-parallel\", \"local-parallel-browsers\""

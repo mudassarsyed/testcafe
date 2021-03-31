@@ -6,9 +6,8 @@ fixture("product")
 test("Apply Apple and Samsung Filters", async (t) => {
 
     // As of now this test is set to filter by apple or samsung
-    // to filter for any other device manufaurers modify the regex for the `checkBoxes` selector
-    await t.wait(2000);
-    const checkBoxes = Selector('input').withAttribute('value', /^(Apple|Samsung)$/);
+    // to filter for any other device manufacturers modify the regex for the `checkBoxes` selector
+    const checkBoxes = Selector('input',{ timeout: 3000 }).withAttribute('value', /^(Apple|Samsung)$/);
     const numberOfCheckboxes = await checkBoxes.count;
     
     const numOfProductsFound = Selector('.products-found')
