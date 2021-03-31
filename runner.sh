@@ -99,16 +99,21 @@ run_parallel_1t_Nb(){
 
     test_base_path="src/test/suites"
 
+    # list of all browsers
+    browser_list=("@browserStack/browserstack:firefox@75.0:Windows 8.1" "@browserStack/browserstack:chrome@80.0:OS X High Sierra" "@browserStack/browserstack:firefox@75.0:Windows 8.1" "@browserStack/browserstack:Samsung Galaxy S20@10.0" "@browserStack/browserstack:iPhone XS@13.0")
+
+    # loop over all tests 
     for test_path in $(find $test_base_path -type f -print)
     do
-    
-        $testcafe "@browserStack/browserstack:firefox@74.0:OS X High Sierra"  $test_path --test-scheduling --reporter spec &
-        $testcafe "@browserStack/browserstack:chrome@80.0:OS X High Sierra"  $test_path --test-scheduling --reporter spec &
-        $testcafe "@browserStack/browserstack:firefox@75.0:Windows 8.1"  $test_path --test-scheduling --reporter spec &
-        $testcafe "@browserStack/browserstack:Samsung Galaxy S20@10.0"  $test_path --test-scheduling --reporter spec &
-        $testcafe "@browserStack/browserstack:iPhone XS@13.0"  $test_path --test-scheduling --reporter spec
+        # loop over all browsers and start parallel testcafe sessions.
+        # note the '&' at the end of the testcafe command, this makes all the tests
+        # in the loop run as parallel processes
+        for browser in "${browser_list[@]}"
+            do
+                $testcafe "$browser"  $test_path --test-scheduling --reporter spec &
+            done
+            echo "iteration complete"
         wait
-    
     done
 
 }
