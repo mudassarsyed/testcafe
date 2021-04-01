@@ -7,7 +7,7 @@
 TestCafe is a Node.js tool to automate end-to-end web testing.
 TestCafe uses a URL-rewriting proxy which allows it to work without the WebDriver. This proxy injects the driver script that emulates user actions into the tested page. TestCafe is a tool that supports page object model, data-driven and behavior-driven development (BDD).
 
-This BrowserStack Example repository demonstrates a TestCafe framework written in TestCafe with parallel testing capabilities. The TestCafe test scripts are written for the open source [BrowserStack Demo web application](https://bstackdemo.com) ([Github](https://github.com/browserstack/browserstack-demo-app)). This BrowserStack Demo App is an e-commerce web application which showcases multiple real-world user scenarios. The app is bundled with offers data, orders data and products data that contains everything you need to start using the app and run tests out-of-the-box.
+This BrowserStack Example repository demonstrates a test framework written in TestCafe with parallel testing capabilities. The TestCafe test scripts are written for the open source [BrowserStack Demo web application](https://bstackdemo.com) ([Github](https://github.com/browserstack/browserstack-demo-app)). This BrowserStack Demo App is an e-commerce web application which showcases multiple real-world user scenarios. The app is bundled with offers data, orders data and products data that contains everything you need to start using the app and run tests out-of-the-box.
 
 The TestCafe tests are run on different platforms like on-prem, docker and BrowserStack using various run configurations and test capabilities.
 
@@ -201,16 +201,15 @@ This infrastructure points to running the tests on your own machine using a brow
 
   Alternatively, you can also hardcode username and access_key objects in the `common_env` function in [runner.sh](runner.sh) file.
 
-- Download the appropriate BrowserStack local binary based on your operating system from [Local Testing docs ](https://www.browserstack.com/local-testing/automate) and set the path to the binary in the `local_binary` variable in the  [runner.sh](runner.sh) file.
+- Download the appropriate BrowserStack local binary based on your operating system from [Local Testing docs ](https://www.browserstack.com/local-testing/automate) and set the path to the binary in the `local_binary` variable in the [runner.sh](runner.sh) file.
 
   For Example
 
-    After downloaded the appropriate binary from the [local testing docs](https://www.browserstack.com/local-testing/automate) to the `resources/local` directory in the project root directory, then in `runner.sh` set
+  After downloaded the appropriate binary from the [local testing docs](https://www.browserstack.com/local-testing/automate) to the `resources/local` directory in the project root directory, then in `runner.sh` set
 
-    ```sh
-    local_binary="resources/local/BrowserStackLocal"
-    ```
-
+  ```sh
+  local_binary="resources/local/BrowserStackLocal"
+  ```
 
 ## Running Your Tests
 
