@@ -30,7 +30,7 @@ jobs:
         run: ./node_modules/.bin/http-server -p 8099 &
 
       - name: 'Running test on BrowserStack'  # Invokes the actual test script that would run on BrowserStack browsers
-        run: sh runner.sh bstack single  # See sample test script above
+        run: ./runner.sh bstack single  # See sample test script above
 
       - name: 'BrowserStackLocal Stop'  # Terminating the BrowserStackLocal tunnel connection
         uses: browserstack/github-actions/setup-local@master
