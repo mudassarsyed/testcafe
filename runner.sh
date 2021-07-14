@@ -100,7 +100,7 @@ run_parallel_1t_Nb(){
     test_base_path="src/test/suites"
 
     # list of all browsers
-    browser_list=("@browserStack/browserstack:firefox@75.0:Windows 8.1" "@browserStack/browserstack:chrome@80.0:OS X High Sierra" "@browserStack/browserstack:firefox@75.0:Windows 8.1" "@browserStack/browserstack:Samsung Galaxy S20@10.0" "@browserStack/browserstack:iPhone XS@13.0")
+    browser_list={"@browserStack/browserstack:firefox@75.0:Windows 8.1" "@browserStack/browserstack:chrome@80.0:OS X High Sierra" "@browserStack/browserstack:firefox@75.0:Windows 8.1" "@browserStack/browserstack:Samsung Galaxy S20@10.0" "@browserStack/browserstack:iPhone XS@13.0"}
 
     # loop over all tests 
     for test_path in $(find $test_base_path -type f -print)
